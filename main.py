@@ -73,7 +73,7 @@ async def pizza(ctx):
 
 @bot.command()
 async def megboard(ctx):
-    output = "```"+ "\n".join(f"{key}: {value}" for key,value in megs.items()) + "```"
+    output = "```"+ "\n".join(f"{key}: {value}" for key,value in sorted(megs.items())) + "```"
     await ctx.send(output)
 
 @client.event
