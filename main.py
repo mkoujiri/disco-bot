@@ -35,9 +35,9 @@ def save(csv_file):
 async def meg(ctx, user: discord.Member = None):
     if(user):
         if str(user) in megs:
-            megs.update({str(user): int(megs.get(str(user)))+1})
+            megs.update({str(user): str(int(megs.get(str(user)))+1)})
         else:
-            megs.update({str(user): 1})
+            megs.update({str(user): str(1)})
 
         save()
         await ctx.send(f"megged {user}, they have {megs.get(str(user))} megs")
@@ -47,34 +47,34 @@ async def meg(ctx, user: discord.Member = None):
 @bot.command()
 async def apple(ctx, count: int = 1):
     if 'apple' in counts:
-        counts.update({'apple': int(counts.get('apple'))+count})
+        counts.update({'apple': str(int(counts.get('apple'))+count)})
     else:
-        counts.update({'apple': count})
+        counts.update({'apple': str(count)})
     save()
     await ctx.send(f"APPLE!!! {counts.get('apple')} apples")
 
 @bot.command()
 async def bread(ctx, count: int = 1):
     if 'bread' in counts:
-        counts.update({'bread': int(counts.get('bread'))+count})
+        counts.update({'bread': str(int(counts.get('bread'))+count)})
     else:
-        counts.update({'bread': count})
+        counts.update({'bread': str(count)})
     save()
     await ctx.send(f"Get that bread!!! {counts.get('bread')} breadsticks")
 
 @bot.command()
 async def pizza(ctx, count: int = 1):
     if 'pizza' in counts:
-        counts.update({'pizza': int(counts.get('pizza'))+count})
+        counts.update({'pizza': str(int(counts.get('pizza'))+count)})
     else:
-        counts.update({'pizza': count})
+        counts.update({'pizza': str(count)})
     save()
     await ctx.send(f"Get that pizza, go for the thin slices!!! {counts.get('pizza')} pizza slices")
 
 @bot.command()
 async def reset(ctx):
-    counts.update({'pizza': 0})
-    counts.update({'bread': 0})
+    counts.update({'pizza': str(0)})
+    counts.update({'bread': str(0)})
     save()
     await ctx.send(f"Reset pizza and bread counters");
 
