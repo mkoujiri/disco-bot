@@ -45,31 +45,38 @@ async def meg(ctx, user: discord.Member = None):
         await ctx.send(f"mention someone that you want to meg fool")
 
 @bot.command()
-async def apple(ctx):
+async def apple(ctx, count: int = 1):
     if 'apple' in counts:
-        counts.update({'apple': int(counts.get('apple'))+1})
+        counts.update({'apple': int(counts.get('apple'))+count})
     else:
-        counts.update({'apple': 1})
+        counts.update({'apple': count})
     save()
     await ctx.send(f"APPLE!!! {counts.get('apple')} apples")
 
 @bot.command()
-async def bread(ctx):
+async def bread(ctx, count: int = 1):
     if 'bread' in counts:
-        counts.update({'bread': int(counts.get('bread'))+1})
+        counts.update({'bread': int(counts.get('bread'))+count})
     else:
-        counts.update({'bread': 1})
+        counts.update({'bread': count})
     save()
     await ctx.send(f"Get that bread!!! {counts.get('bread')} breadsticks")
 
 @bot.command()
-async def pizza(ctx):
+async def pizza(ctx, count: int = 1):
     if 'pizza' in counts:
-        counts.update({'pizza': int(counts.get('pizza'))+1})
+        counts.update({'pizza': int(counts.get('pizza'))+count})
     else:
-        counts.update({'pizza': 1})
+        counts.update({'pizza': count})
     save()
     await ctx.send(f"Get that pizza, go for the thin slices!!! {counts.get('pizza')} pizza slices")
+
+@bot.command()
+async def reset(ctx):
+    counts.update({'pizza': 0})
+    counts.update({'bread': 0})
+    save()
+    await ctx.send(f"Reset pizza and bread counters");
 
 @bot.command()
 async def megboard(ctx):
