@@ -1,6 +1,7 @@
 # bot.py
 import csv
 import os
+from random import *
 
 import discord
 from dotenv import load_dotenv
@@ -21,31 +22,42 @@ def load_csv(file_name):
         reader = csv.reader(csv_file)
         return dict(reader)
 
-def save(csv_file):
-    with open(csv_file, 'w') as csv_file:  
+def save():
+    with open(meg_file, 'w') as csv_file:  
         meg_writer = csv.writer(csv_file)
         for key, value in megs.items():
-           writer.writerow([key, value])
-    with open(csv_file, 'w') as csv_file:  
-        counts_writer = csv.writer(counts_file)
+           meg_writer.writerow([key, value])
+    with open(counts_file, 'w') as csv_file:  
+        counts_writer = csv.writer(csv_file)
         for key, value in counts.items():
-           writer.writerow([key, value])
+           counts_writer.writerow([key, value])
 
 @bot.command()
 async def meg(ctx, user: discord.Member = None):
     if(user):
-        if str(user) in megs:
-            megs.update({str(user): str(int(megs.get(str(user)))+1)})
+        if user.nick in megs:
+            megs.update({user.nick: str(int(megs.get(user.nick))+1)})
         else:
-            megs.update({str(user): str(1)})
+            megs.update({user.nick: str(1)})
 
         save()
-        await ctx.send(f"megged {user}, they have {megs.get(str(user))} megs")
+        await ctx.send(f"megged {user.nick}, they have {megs.get(user.nick)} megs")
     else:
-        with open("test_image.png", 'rb') as f:
-            picture = discord.file(f)
-            await ctx.send(f"mention someone that you want to meg fool", file=picture)
-
+        await ctx.send(f"mention someone that you want to meg fool")
+@bot.command()
+async def randomapple(ctx):
+    file_paths = os.listdir("/home/vimguy/disco-bot/assets/apples")
+    file_path = '/home/vimguy/disco-bot/assets/apples/'+file_paths[randint(0,len(file_paths)-1)]
+    with open(file_path, 'rb') as f:
+        picture = discord.File(f)
+        await ctx.send("",file=picture);
+@bot.command()
+async def randomdisco(ctx):
+    file_paths = os.listdir("/home/vimguy/disco-bot/assets/discos")
+    file_path = '/home/vimguy/disco-bot/assets/discos'+file_paths[randint(0,len(file_paths)-1)]
+    with open(file_path, 'rb') as f:
+        picture = discord.File(f)
+        await ctx.send("Aren't they charming?",file=picture);
 @bot.command()
 async def apple(ctx, count: int = 1):
     if 'apple' in counts:
@@ -82,7 +94,8 @@ async def reset(ctx):
 
 @bot.command()
 async def megboard(ctx):
-    output = "```"+ "\n".join(f"{key}: {value}" for key,value in sorted(megs.items())) + "```"
+    print(megs.items())
+    output = "```"+ "\n".join(f"{key}: {value}" for key,value in sorted(megs.items(),key=lambda item: item[1],reverse=True)) + "```"
     await ctx.send(output)
 
 @client.event
