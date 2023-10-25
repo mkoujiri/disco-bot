@@ -54,7 +54,7 @@ async def randomapple(ctx):
 @bot.command()
 async def randomdisco(ctx):
     file_paths = os.listdir("/home/vimguy/disco-bot/assets/discos")
-    file_path = '/home/vimguy/disco-bot/assets/discos'+file_paths[randint(0,len(file_paths)-1)]
+    file_path = '/home/vimguy/disco-bot/assets/discos/'+file_paths[randint(0,len(file_paths)-1)]
     with open(file_path, 'rb') as f:
         picture = discord.File(f)
         await ctx.send("Aren't they charming?",file=picture);
