@@ -42,7 +42,9 @@ async def meg(ctx, user: discord.Member = None):
         save()
         await ctx.send(f"megged {user}, they have {megs.get(str(user))} megs")
     else:
-        await ctx.send(f"mention someone that you want to meg fool")
+        with open("test_image.png", 'rb') as f:
+            picture = discord.file(f)
+            await ctx.send(f"mention someone that you want to meg fool", file=picture)
 
 @bot.command()
 async def apple(ctx, count: int = 1):
