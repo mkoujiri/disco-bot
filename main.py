@@ -2,6 +2,7 @@
 import csv
 import os
 from random import *
+import requests
 
 import discord
 from dotenv import load_dotenv
@@ -17,6 +18,8 @@ client = discord.Client(intents=discord.Intents.all())
 meg_file='/home/vimguy/disco-bot/megs.csv'
 counts_file='/home/vimguy/disco-bot/counts.csv'
 
+quotes_list = []
+
 def load_csv(file_name):
     with open(file_name, 'r') as csv_file:
         reader = csv.reader(csv_file)
@@ -31,6 +34,36 @@ def save():
         counts_writer = csv.writer(csv_file)
         for key, value in counts.items():
            counts_writer.writerow([key, value])
+
+def read_quotes():
+    # read all messages
+    API_ENDPOINT = "https://discord.com/api"
+    quotes_channel_id = 1159904203242737694
+    headers = {
+            "authorization": "Bot "+TOKEN
+            }
+    inputs = {
+            "limit":100
+            }
+    while True:
+        data = requests.get(f"{API_ENDPOINT}/channels/{quotes_channel_id}/messages",headers=headers,params=inputs).json()
+
+        for msg in data:
+            # process the message
+            content = msg['content']
+            author = msg['author']['global_name']
+            time_stamp = msg['timestamp'][0:10]
+            if author is not None:
+                if "\"" in content or "-" in content:
+                    # message is a quote
+                    quotes_list.append(f"This was sent by {author} at {time_stamp}:\n {content}")
+
+        # find oldest message
+        inputs["before"]=data[-1]["id"]
+        if(len(data) < 100):
+            break
+    print(f"loaded {len(quotes_list)} quotes")
+
 
 @bot.command()
 async def meg(ctx, user: discord.Member = None):
@@ -58,6 +91,12 @@ async def randomdisco(ctx):
     with open(file_path, 'rb') as f:
         picture = discord.File(f)
         await ctx.send("Aren't they charming?",file=picture);
+@bot.command()
+async def randomquote(ctx):
+    await ctx.send(choice(quotes_list));
+@bot.command()
+async def reload_quotes(ctx):
+    read_quotes()
 @bot.command()
 async def apple(ctx, count: int = 1):
     if 'apple' in counts:
@@ -101,6 +140,13 @@ async def megboard(ctx):
 @client.event
 async def on_ready():
     print(f'{client.user} has connected to Discord!')
-megs = load_csv(meg_file)
-counts = load_csv(counts_file)
+# megs = load_csv(meg_file)
+# counts = load_csv(counts_file)
+
+read_quotes()
+    
+
+
+
+
 bot.run(TOKEN)
