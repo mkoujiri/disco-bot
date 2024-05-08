@@ -162,7 +162,10 @@ async def summerboard(ctx):
     for key,value in sorted(summer_logs.items(),key=lambda item: item[1].total_points(), reverse=True):
         guild = await bot.fetch_guild(DISCO_SERVER_ID)
         user = await guild.fetch_member(key)
-        output+=f"{user.nick},{value.total_points()}\n"
+        if user.nick is not None:
+            output+=f"{user.nick},{value.total_points()}\n"
+        else:
+            output+=f"{user.display_name},{value.total_points()}\n"
     output+='```'
     await ctx.send(output)
 
