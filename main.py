@@ -136,7 +136,7 @@ async def addapple(ctx):
     save_attachments(ctx,apple_dir)
 
 @bot.slash_command(name="summer",description="slash command")
-async def summer(ctx,activity_type: discord.Option(str,choices=["sprints","throws","film","lift","misc"]),points: discord.Option(int),description: discord.Option(str)):
+async def summer(ctx,activity_type: discord.Option(str,choices=["sprints","throws","film","lift","misc"]),points: discord.Option(float),description: discord.Option(str)):
     save_attachments(ctx,summer_comp_dir)
 
     user_id = f"{ctx.author.id}"
